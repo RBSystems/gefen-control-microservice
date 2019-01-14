@@ -22,7 +22,10 @@ func GetOutput(address, output string) (string, *nerr.E) {
 
 	//TODO: make it return just the number not "A#"
 	log.L.Info(len(response))
-	test := response[1][:1]
-	log.L.Info(test)
-	return response[1], nil
+	input := string(response[1])
+	input = input[1:]
+
+	log.L.Info(input)
+
+	return input, nil
 }
