@@ -22,7 +22,6 @@ func GetOutput(address, output string) (string, *nerr.E) {
 	}
 	response := strings.Split(string(b), "\r\n")
 
-	//TODO: make it return just the number not "A#"
 	log.L.Info(len(response))
 	input := string(response[1])
 	input = input[1:]
