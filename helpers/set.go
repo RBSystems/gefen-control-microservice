@@ -31,5 +31,7 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 	response := strings.Split(string(b), " ")
 	log.L.Info(len(response))
 	log.L.Info(response)
+
+	conn.Close()
 	return input, nil
 }

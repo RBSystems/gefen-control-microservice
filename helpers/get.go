@@ -28,6 +28,7 @@ func GetOutput(address, output string) (string, *nerr.E) {
 
 	log.L.Info(input)
 
+	conn.Close()
 	return input, nil
 }
 
@@ -39,27 +40,29 @@ func GetHardware(address string) (string, string, string, *nerr.E) {
 		log.L.Errorf("Failed to get connection with %s: %s", address, gerr.Error())
 		return "", "", "", nerr.Translate(gerr).Add("Telnet connection failed")
 	}
-	ipaddr, err := GetIPAddress(address, conn)
+	ipaddr, err := getIPAddress(address, conn)
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return "", "", "", err.Add("Telnet connection failed")
 	}
 
-	verdata, err := GetVerData(address, conn)
+	verdata, err := getVerData(address, conn)
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return "", "", "", err.Add("Telnet connection failed")
 	}
 
-	macaddr, err := GetMacAddress(address, conn)
+	macaddr, err := getMacAddress(address, conn)
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return "", "", "", err.Add("Telnet connection failed")
 	}
+
+	conn.Close()
 	return ipaddr, macaddr, verdata, nil
 }
 
-func GetIPAddress(address string, conn *net.TCPConn) (string, *nerr.E) {
+func getIPAddress(address string, conn *net.TCPConn) (string, *nerr.E) {
 	conn.Write([]byte("#show_ip\r\n"))
 	b, err := readUntil(CARRIAGE_RETURN, conn, 3)
 	if err != nil {
@@ -76,7 +79,7 @@ func GetIPAddress(address string, conn *net.TCPConn) (string, *nerr.E) {
 }
 
 //gets software and hardware data
-func GetVerData(address string, conn *net.TCPConn) (string, *nerr.E) {
+func getVerData(address string, conn *net.TCPConn) (string, *nerr.E) {
 	conn.Write([]byte("#show_ver_data\r\n"))
 	b, err := readUntil(CARRIAGE_RETURN, conn, 3)
 	if err != nil {
@@ -93,7 +96,7 @@ func GetVerData(address string, conn *net.TCPConn) (string, *nerr.E) {
 }
 
 //gets macaddress of device
-func GetMacAddress(address string, conn *net.TCPConn) (string, *nerr.E) {
+func getMacAddress(address string, conn *net.TCPConn) (string, *nerr.E) {
 	conn.Write([]byte("#show_mac_addr\r\n"))
 	b, err := readUntil(CARRIAGE_RETURN, conn, 3)
 	if err != nil {
