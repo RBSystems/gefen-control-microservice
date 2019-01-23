@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/byuoitav/common/log"
@@ -33,5 +34,5 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 	log.L.Info(response)
 
 	conn.Close()
-	return input, nil
+	return fmt.Sprintf("%s:%s", input, ouput), nil
 }
