@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"net"
 	"strings"
 
@@ -29,7 +30,7 @@ func GetOutput(address, output string) (string, *nerr.E) {
 	log.L.Info(input)
 
 	conn.Close()
-	return input, nil
+	return fmt.Sprintf("%s:%s", input, output), nil
 }
 
 //This function gets the IP Address (ipaddr), Software and hardware

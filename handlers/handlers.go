@@ -30,6 +30,8 @@ func SwitchInput(context echo.Context) error {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return context.JSON(http.StatusInternalServerError, err)
 	}
+
+	//decrement response by 1
 	response, _ := strconv.Atoi(resp)
 	response = response - 1
 	return context.JSON(http.StatusOK, status.Input{Input: string(response)})
@@ -42,7 +44,7 @@ func ShowOutput(context echo.Context) error {
 	//increment output by 1
 	temp, _ := strconv.Atoi(output)
 	port := temp + 1
-
+	log.L.Info("The port number is %v ", port)
 	resp, err := helpers.GetOutput(address, string(port))
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
