@@ -21,6 +21,7 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 		return "", nerr.Translate(err).Add("Telnet connection failed")
 	}
 	//execute telnet command to switch input
+	log.L.Info(len(input))
 	conn.Write([]byte("s " + input + "\r\n"))
 	b, err := readUntil(CARRIAGE_RETURN, conn, 3)
 	if err != nil {
@@ -28,7 +29,7 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 	}
 
 	if strings.Contains(string(b), "OUT OF RANGE") {
-		return "", nerr.Create("Input is out of range", "Error")
+		return "", nerr.Create("Input is test of range", "Error")
 	}
 
 	response := strings.Split(fmt.Sprintf("%s", b), " ")
