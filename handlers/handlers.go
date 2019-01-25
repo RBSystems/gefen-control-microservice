@@ -35,7 +35,8 @@ func SwitchInput(context echo.Context) error {
 	//decrement response by 1
 	response, _ := strconv.Atoi(resp)
 	response = response - 1
-	return context.JSON(http.StatusOK, status.Input{Input: fmt.Sprintf("%v", input)})
+	//in:out
+	return context.JSON(http.StatusOK, status.Input{Input: fmt.Sprintf("%v:%v", input, output)})
 }
 
 func ShowOutput(context echo.Context) error {
@@ -56,7 +57,7 @@ func ShowOutput(context echo.Context) error {
 	log.L.Infof("input: %d", input)
 	input = input - 1
 
-	return context.JSON(http.StatusOK, status.Input{Input: fmt.Sprintf("%v", input)})
+	return context.JSON(http.StatusOK, status.Input{Input: fmt.Sprintf("%v:%v", input, output)})
 }
 
 func HardwareInfo(context echo.Context) error {
