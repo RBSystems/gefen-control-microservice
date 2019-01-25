@@ -16,7 +16,7 @@ func main() {
 
 	// Functionality Endpoints
 	write := router.Group("", auth.AuthorizeRequest("write-state", "room", auth.LookupResourceFromAddress))
-	write.PUT("/:address/output/:output/input/:input", handlers.SwitchInput)
+	write.GET("/:address/output/:output/input/:input", handlers.SwitchInput)
 
 	// Status/Hardware Info Endpoints
 	read := router.Group("", auth.AuthorizeRequest("read-state", "room", auth.LookupResourceFromAddress))
