@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -34,7 +35,7 @@ func SwitchInput(context echo.Context) error {
 	//decrement response by 1
 	response, _ := strconv.Atoi(resp)
 	response = response - 1
-	return context.JSON(http.StatusOK, status.Input{Input: string(response)})
+	return context.JSON(http.StatusOK, status.Input{Input: fmt.Sprintf("%v", input)})
 }
 
 func ShowOutput(context echo.Context) error {
@@ -44,15 +45,19 @@ func ShowOutput(context echo.Context) error {
 	//increment output by 1
 	temp, _ := strconv.Atoi(output)
 	port := temp + 1
-	log.L.Info("The port number is %v ", port)
-	resp, err := helpers.GetOutput(address, string(port))
+	log.L.Info("The port number is %v", port)
+
+	resp, err := helpers.GetOutput(address, fmt.Sprintf("%v", port))
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return context.JSON(http.StatusInternalServerError, err)
 	}
+
 	input, _ := strconv.Atoi(resp)
+	log.L.Infof("input: %d", input)
 	input = input - 1
-	return context.JSON(http.StatusOK, status.Input{Input: string(input)})
+
+	return context.JSON(http.StatusOK, status.Input{Input: fmt.Sprintf("%v", input)})
 }
 
 func HardwareInfo(context echo.Context) error {
