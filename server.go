@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	log.SetLevel("debug")
 	port := ":8024"
 	router := common.NewRouter()
 

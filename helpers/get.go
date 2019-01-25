@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"net"
 	"strings"
 
@@ -15,21 +16,23 @@ func GetOutput(address, output string) (string, *nerr.E) {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return "", nerr.Translate(err).Add("Telnet connection failed")
 	}
-	conn.Write([]byte("n 1" + "\r\n"))
+
+	conn.Write([]byte(fmt.Sprintf("n %v\r\n", output)))
 	b, err := readUntil(CARRIAGE_RETURN, conn, 3)
 	if err != nil {
 		return "", nerr.Translate(err).Add("failed to read from connection")
 	}
-	response := strings.Split(string(b), "\r\n")
 
-	log.L.Info(len(response))
+	response := strings.Split(fmt.Sprintf("%s", b), "\r\n")
+
+	log.L.Infof("response: '%s'", response)
 	input := string(response[1])
 	input = input[1:]
 
-	log.L.Info(input)
+	log.L.Infof("input: '%s'", input)
 
 	conn.Close()
-	return input, nil
+	return fmt.Sprintf("%s", input), nil
 }
 
 //This function gets the IP Address (ipaddr), Software and hardware
