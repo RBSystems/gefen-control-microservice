@@ -38,13 +38,11 @@ func SwitchInput(context echo.Context) error {
 }
 
 func ShowOutput(context echo.Context) error {
-	output := context.Param("output")
+	output := context.Param("port")
 	address := context.Param("address")
-
 	//increment output by 1
 	temp, _ := strconv.Atoi(output)
 	port := temp + 1
-	log.L.Info("The port number is %v ", port)
 	resp, err := helpers.GetOutput(address, string(port))
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())

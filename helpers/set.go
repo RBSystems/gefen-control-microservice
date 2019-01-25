@@ -20,6 +20,7 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 		return "", nerr.Translate(err).Add("Telnet connection failed")
 	}
 	//execute telnet command to switch input
+	log.L.Info(len(input))
 	conn.Write([]byte("s " + input + "\r\n"))
 	b, err := readUntil(CARRIAGE_RETURN, conn, 3)
 	if err != nil {
