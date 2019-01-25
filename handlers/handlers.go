@@ -26,7 +26,7 @@ func SwitchInput(context echo.Context) error {
 
 	address := context.Param("address")
 
-	resp, err := helpers.SwitchInput(address, string(outport), string(inport))
+	resp, err := helpers.SwitchInput(address, fmt.Sprintf("%v", outport), fmt.Sprintf("%v", inport))
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return context.JSON(http.StatusInternalServerError, err)

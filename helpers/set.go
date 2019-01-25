@@ -29,7 +29,7 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 	}
 
 	if strings.Contains(string(b), "OUT OF RANGE") {
-		return "", nerr.Create("Input is out of range", "Error")
+		return "", nerr.Create("Input is test of range", "Error")
 	}
 
 	response := strings.Split(fmt.Sprintf("%s", b), " ")
