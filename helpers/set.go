@@ -26,13 +26,14 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 	if err != nil {
 		return "", nerr.Translate(err).Add("failed to read from connection")
 	}
+
 	if strings.Contains(string(b), "OUT OF RANGE") {
 		return "", nerr.Create("Input is out of range", "Error")
 	}
-	response := strings.Split(string(b), " ")
-	log.L.Info(len(response))
-	log.L.Info(response)
+
+	response := strings.Split(fmt.Sprintf("%s", b), " ")
+	log.L.Infof("response: '%s'", response)
 
 	conn.Close()
-	return fmt.Sprintf("%s:%s", input, ouput), nil
+	return fmt.Sprintf("%s", input), nil
 }
