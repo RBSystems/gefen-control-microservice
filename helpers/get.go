@@ -16,6 +16,8 @@ func GetOutput(address, output string) (string, *nerr.E) {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return "", nerr.Translate(err).Add("Telnet connection failed")
 	}
+	//close connection
+	defer conn.Close()
 
 	conn.Write([]byte(fmt.Sprintf("n %v\r\n", output)))
 	b, err := readUntil(CARRIAGE_RETURN, conn, 3)
@@ -31,7 +33,6 @@ func GetOutput(address, output string) (string, *nerr.E) {
 
 	log.L.Infof("input: '%s'", input)
 
-	conn.Close()
 	return fmt.Sprintf("%s", input), nil
 }
 
@@ -43,6 +44,9 @@ func GetHardware(address string) (string, string, string, *nerr.E) {
 		log.L.Errorf("Failed to get connection with %s: %s", address, gerr.Error())
 		return "", "", "", nerr.Translate(gerr).Add("Telnet connection failed")
 	}
+	//close connection
+	defer conn.Close()
+
 	ipaddr, err := getIPAddress(address, conn)
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
