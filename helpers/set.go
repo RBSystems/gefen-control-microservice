@@ -16,10 +16,13 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 	//TODO:check input is valid before sending command (sending input 22 will change it to 2)
 
 	conn, err := getConnection(address, true)
+
 	if err != nil {
 		log.L.Errorf("Failed to establish connection with %s : %s", address, err.Error())
 		return "", nerr.Translate(err).Add("Telnet connection failed")
 	}
+	//close connection when returned
+	defer conn.Close()
 	//execute telnet command to switch input
 	log.L.Info(len(input))
 	conn.Write([]byte("s " + input + "\r\n"))
@@ -35,6 +38,5 @@ func SwitchInput(address, ouput, input string) (string, *nerr.E) {
 	response := strings.Split(fmt.Sprintf("%s", b), " ")
 	log.L.Infof("response: '%s'", response)
 
-	conn.Close()
 	return fmt.Sprintf("%s", input), nil
 }
